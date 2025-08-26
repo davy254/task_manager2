@@ -24,3 +24,11 @@ def project_list(request):
     return render(request, "tasks/project_list.html", context)
 
 
+def project_details(request, project_id):
+    """"render the details of a project."""
+    project = Project.objects.get(id= project_id)
+    context = {
+        "project": project
+    }
+    return render(request, "tasks/project_details.html", context)
+
