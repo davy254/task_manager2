@@ -1,6 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import Project
 from django.core.paginator import Paginator
+from .forms import ProjectForm
 
 # Create your views here.
 def home(request):
@@ -31,4 +32,21 @@ def project_details(request, project_id):
         "project": project
     }
     return render(request, "tasks/project_details.html", context)
+
+def create_project(request):
+    """Create a new project."""
+    if request.method == "POST":
+        # handle form submission tocreate a new project
+        form = ProjectForm(request.POST)
+
+        if form.is_valid():
+            form.save()
+            return redirect('project-list')
+    else:
+        #display a blank form for creating a new project
+        form = ProjectForm()
+    context = {
+            "form": form
+        }
+    return render(request, "tasks/project_form.html", context)
 
