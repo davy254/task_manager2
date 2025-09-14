@@ -50,3 +50,21 @@ def create_project(request):
         }
     return render(request, "tasks/project_form.html", context)
 
+
+def update_project(request, project_id):
+    """Update an existing project."""
+    project = Project.objects.get(id=project_id)
+    if request.method == "POST":
+        # handle form submission to update the project
+        form = ProjectForm(request.POST, instance=project)
+        if form.is_valid():
+            form.save()
+            return redirect('project-details', project_id=project.id)
+           
+    else:
+
+        form = ProjectForm(instance=project)
+    context = {
+        "form": form
+    }
+    return render(request, "tasks/project_form.html", context)
