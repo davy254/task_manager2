@@ -68,3 +68,13 @@ def update_project(request, project_id):
         "form": form
     }
     return render(request, "tasks/project_form.html", context)
+
+
+def delete_project(request, project_id):
+    """Delete a project."""
+    project = Project.objects.get(id=project_id)
+    if request.method == "POST":
+        project.delete()
+        return redirect('project-list')
+    return render(request, "tasks/project_confirm_delete.html", {"project":project})
+    
