@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import Project
 from django.core.paginator import Paginator
 from .forms import ProjectForm
@@ -25,9 +25,9 @@ def project_list(request):
     return render(request, "tasks/project_list.html", context)
 
 
-def project_details(request, project_id):
+def project_details(request, slug):
     """"render the details of a project."""
-    project = Project.objects.get(id= project_id)
+    project = Project.objects.get(slug=slug)
     context = {
         "project": project
     }
@@ -51,15 +51,17 @@ def create_project(request):
     return render(request, "tasks/project_form.html", context)
 
 
-def update_project(request, project_id):
+def update_project(request, slug):
     """Update an existing project."""
-    project = Project.objects.get(id=project_id)
+    project = get_object_or_404(Project, slug=slug)
     if request.method == "POST":
         # handle form submission to update the project
         form = ProjectForm(request.POST, instance=project)
         if form.is_valid():
-            form.save()
-            return redirect('project-details', project_id=project.id)
+            print("Form is valid ✅")
+            updated_project = form.save()
+            print("Saved:", updated_project.name, updated_project.description, updated_project.slug)
+            return redirect('project-details', slug=updated_project.slug)
            
     else:
 
@@ -70,9 +72,9 @@ def update_project(request, project_id):
     return render(request, "tasks/project_form.html", context)
 
 
-def delete_project(request, project_id):
+def delete_project(request, slug):
     """Delete a project."""
-    project = Project.objects.get(id=project_id)
+    project = Project.objects.get(slug=slug)
     if request.method == "POST":
         project.delete()
         return redirect('project-list')

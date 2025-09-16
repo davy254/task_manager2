@@ -9,7 +9,7 @@
 <ul class="list-group mb-3">
   {% for project in page_obj %}
   <li class="list-group-item d-flex justify-content-between align-items-center">
-    <a href="{% url 'project-details' project.id %}">{{ project.name }}</a>
+    <a href="{% url 'project-details' project.slug %}">{{ project.name }}</a>
     <small class="text-muted">{{ project.created_at|date:"M d, Y" }}</small>
   </li>
   {% endfor %}
