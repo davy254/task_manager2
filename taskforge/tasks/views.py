@@ -67,7 +67,8 @@ def update_project(request, slug):
 
         form = ProjectForm(instance=project)
     context = {
-        "form": form
+        "form": form,
+        "project": project
     }
     return render(request, "tasks/project_form.html", context)
 
