@@ -32,4 +32,26 @@ class Project(models.Model):
             self.slug = slug
         super().save(*args, **kwargs)
 
+
+
+class Task(models.Model):
+    """Task model"""
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    title = models.CharField(max_length=200)
+    description = models.TextField(blank=True, null=True)
+    is_completed = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    due_date = models.DateTimeField(blank=True, null=True)
+    slug = models.SlugField(max_length=200, unique=True, blank=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+        verbose_name_plural = "Tasks"
+
+
+    def __str__(self):
+        return f'{self.title} - {"Completed" if self.is_completed else "Pending"}'
+
+    def __repr__(self):
+        return f'<Task(title={self.title}, is_completed={self.is_completed}, due_date={self.due_date})>'
     
